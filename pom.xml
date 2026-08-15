@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.confocal</groupId>
+  <artifactId>confocal-cell-counter</artifactId>
+  <version>1.0.0</version>
+  <packaging>jar</packaging>
+
+  <name>Confocal Cell Counter</name>
+  <description>ImageJ2 plugin to batch-count cells in confocal TIFF images.</description>
+  <developers>
+    <developer>
+      <name>Anson Zhang</name>
+    </developer>
+  </developers>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.release>8</maven.compiler.release>
+    <imagej.version>2.0.0-rc-59</imagej.version>
+    <ij.version>1.51n</ij.version>
+    <scijava-common.version>2.62.1</scijava-common.version>
+  </properties>
+
+  <repositories>
+    <repository>
+      <id>scijava.public</id>
+      <url>https://maven.scijava.org/content/groups/public</url>
+    </repository>
+  </repositories>
+
+  <dependencies>
+    <!-- ImageJ2 core (Command/@Plugin/@Parameter). Provided by Fiji at runtime. -->
+    <dependency>
+      <groupId>net.imagej</groupId>
+      <artifactId>imagej</artifactId>
+      <version>${imagej.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <!-- ImageJ1 legacy API (ParticleAnalyzer, ResultsTable, EDM, etc.). -->
+    <dependency>
+      <groupId>net.imagej</groupId>
+      <artifactId>ij</artifactId>
+      <version>${ij.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <!-- SciJava Common: hosts the @Plugin annotation processor that writes
+         META-INF/json/org.scijava.plugin.Plugin (the runtime plugin index
+         Fiji uses to discover Commands). Required at compile time. -->
+    <dependency>
+      <groupId>org.scijava</groupId>
+      <artifactId>scijava-common</artifactId>
+      <version>${scijava-common.version}</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>${project.artifactId}-${project.version}</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.13.0</version>
+        <configuration>
+          <release>${maven.compiler.release}</release>
+          <proc>full</proc>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
