@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Date;
 
 import org.scijava.command.Command;
 import org.scijava.log.LogService;
@@ -88,6 +89,8 @@ public class ConfocalCellCounterCommand implements Command {
 			return;
 		}
 
+		writeInfoLog(outDir);
+
 		AutoThresholder.Method method;
 		try {
 			method = AutoThresholder.Method.valueOf(thresholdMethod);
@@ -126,6 +129,32 @@ public class ConfocalCellCounterCommand implements Command {
 
 		log.info("Confocal Cell Counter finished: " + succeeded + "/" + files.length +
 			" images processed. Results written to " + outDir.getPath());
+	}
+
+	private void writeInfoLog(File outDir) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("=== Confocal Cell Counter run ").append(new Date()).append(" ===\n");
+		sb.append("inputDir=").append(inputDir).append('\n');
+		sb.append("thresholdMethod=").append(thresholdMethod).append('\n');
+		sb.append("minSize=").append(minSize).append('\n');
+		sb.append("maxSize=").append(maxSize).append('\n');
+		sb.append("minCircularity=").append(minCircularity).append('\n');
+		sb.append("maxCircularity=").append(maxCircularity).append('\n');
+		sb.append("excludeOnEdges=").append(excludeOnEdges).append('\n');
+		sb.append("includeHoles=").append(includeHoles).append('\n');
+		sb.append("Analysis provided to you by Anson Zhang with the Confocal Cell Counter plugin. \n");
+		sb.append("This plugin is available on GitHub at https://github.com/AnsonZhang2009/confocal-cell-counter \n");
+		sb.append("------------------------------\n");
+		String content = sb.toString();
+
+		try (PrintWriter w = new PrintWriter(new FileWriter(new File(outDir, "info.log"), true))) {
+			w.append(content);
+		}
+		catch (IOException e) {
+			log.error("Could not write info.log: " + e.getMessage());
+		}
+
+		log.info("Confocal Cell Counter parameters:\n" + content);
 	}
 
 	private void process(File file, File outDir, AutoThresholder.Method method, PrintWriter summary)
